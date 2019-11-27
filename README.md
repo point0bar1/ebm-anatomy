@@ -36,3 +36,7 @@ Network structures are located in ```nets.py```. A download function for Oxford 
 **Short-Run MCMC Samples**: Image data experiments will periodically visualize the short-run MCMC samples. A batch of persistent MCMC samples will also be saved for implementations that use persistent initialization for short-run sampling.
 
 **Long-Run MCMC Samples**: Image data experiments have the option to obtain long-run MCMC samples during training. When ```log_longrun``` is set to ```true``` in a data config file, the training implementation will generate long-run MCMC samples at a frequency determined by ```log_longrun_freq```. The appearance of long-run MCMC samples indicates whether the energy function assigns probability mass in realistic regions of the image space.
+
+## Contact
+
+Please contact Mitch Hill (mkhill@ucla.edu) or Erik Nijkamp (enijkamp@ucla.edu) for any questions.
