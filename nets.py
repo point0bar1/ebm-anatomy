@@ -51,6 +51,7 @@ class VanillaNet(nn.Module):
 # ## NONLOCAL NET ## #
 ######################
 # implementation with minor changes from https://github.com/AlexHex7/Non-local_pytorch
+# Original Version: Copyright (c) 2018 AlexHex7
 
 class NonlocalNet(nn.Module):
     def __init__(self, n_c=3, n_f=32, leak=0.05):
