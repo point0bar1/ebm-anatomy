@@ -12,6 +12,7 @@ import os
 # ## DOWNLOAD FLOWERS ## #
 ##########################
 # Code with minor modification from https://github.com/microsoft/CNTK/tree/master/Examples/Image/DataSets/Flowers
+# Original Version: Copyright (c) Microsoft Corporation
 
 def download_flowers_data():
     import tarfile
