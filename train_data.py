@@ -99,9 +99,9 @@ def sample_q():
     x_q = sample_image_set(q)[0]
     return x_q + config['data_epsilon'] * t.randn_like(x_q)
 
-# initialize and update images with langevin dynamics to obtain samples from short-run MCMC distribution s_t
+# initialize and update images with langevin dynamics to obtain samples from finite-step MCMC distribution s_t
 def sample_s_t(L, init_type, update_s_t_0=True):
-    # get initial mcmc states for langevin updates (persistent, data, or noise)
+    # get initial mcmc states for langevin updates ("persistent", "data", "uniform", or "gaussian")
     def sample_s_t_0():
         if init_type == 'persistent':
             return sample_image_set(s_t_0)
@@ -174,6 +174,7 @@ for i in range(config['num_train_iters']):
         if config['shortrun_init'] == 'persistent':
             plot_ims(EXP_DIR + 'shortrun/' + 'x_s_t_0_{:>06d}.png'.format(i+1), s_t_0[0:config['batch_size']])
         t.save(f.state_dict(), EXP_DIR + 'checkpoints/' + 'net_{:>06d}.pth'.format(i+1))
+        # plot diagnostics for energy difference d_s_t and gradient magnitude r_t
         if (i + 1) > 1:
             plot_diagnostics(i, d_s_t_record, r_s_t_record, EXP_DIR + 'plots/')
 
