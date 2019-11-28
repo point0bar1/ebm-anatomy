@@ -173,6 +173,7 @@ for i in range(config['num_train_iters']):
         plot_ims(EXP_DIR + 'shortrun/' + 'x_s_t_{:>06d}.png'.format(i+1), x_s_t)
         if config['shortrun_init'] == 'persistent':
             plot_ims(EXP_DIR + 'shortrun/' + 'x_s_t_0_{:>06d}.png'.format(i+1), s_t_0[0:config['batch_size']])
+        # save network weights
         t.save(f.state_dict(), EXP_DIR + 'checkpoints/' + 'net_{:>06d}.pth'.format(i+1))
         # plot diagnostics for energy difference d_s_t and gradient magnitude r_t
         if (i + 1) > 1:
