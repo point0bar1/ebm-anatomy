@@ -70,7 +70,7 @@ print('Processing data...')
 q = ToyDataset(config['toy_type'], config['toy_groups'], config['toy_sd'],
                config['toy_radius'], config['viz_res'], config['kde_bw'])
 
-# initialize persistent images from noise 
+# initialize persistent states from noise 
 # s_t_0 is used when init_type == 'persistent' in sample_s_t()
 s_t_0 = 2 * t.rand([config['s_t_0_size'], 2, 1, 1]).to(device) - 1
 
@@ -79,15 +79,15 @@ s_t_0 = 2 * t.rand([config['s_t_0_size'], 2, 1, 1]).to(device) - 1
 # ## FUNCTIONS FOR SAMPLING ## #
 ################################
 
-# sample batch from given array of images
+# sample batch from given array of states
 def sample_image_set(image_set, batch_size=config['batch_size']):
     rand_inds = t.randperm(image_set.shape[0])[0:batch_size]
     return image_set[rand_inds], rand_inds
 
-# sample positive images from dataset distribution q
+# sample positive states from toy 2d distribution q
 def sample_q(batch_size=config['batch_size']): return t.Tensor(q.sample_toy_data(batch_size)).to(device)
 
-# initialize and update images with langevin dynamics to obtain samples from finite-step MCMC distribution s_t
+# initialize and update states with langevin dynamics to obtain samples from finite-step MCMC distribution s_t
 def sample_s_t(batch_size, L=config['num_mcmc_steps'], init_type=config['init_type'], update_s_t_0=True):
     # get initial mcmc states for langevin updates ("persistent", "data", "uniform", or "gaussian")
     def sample_s_t_0():
