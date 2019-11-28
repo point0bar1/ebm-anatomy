@@ -80,9 +80,9 @@ s_t_0 = 2 * t.rand([config['s_t_0_size'], 2, 1, 1]).to(device) - 1
 ################################
 
 # sample batch from given array of states
-def sample_image_set(image_set, batch_size=config['batch_size']):
-    rand_inds = t.randperm(image_set.shape[0])[0:batch_size]
-    return image_set[rand_inds], rand_inds
+def sample_state_set(state_set, batch_size=config['batch_size']):
+    rand_inds = t.randperm(state_set.shape[0])[0:batch_size]
+    return state_set[rand_inds], rand_inds
 
 # sample positive states from toy 2d distribution q
 def sample_q(batch_size=config['batch_size']): return t.Tensor(q.sample_toy_data(batch_size)).to(device)
@@ -92,7 +92,7 @@ def sample_s_t(batch_size, L=config['num_mcmc_steps'], init_type=config['init_ty
     # get initial mcmc states for langevin updates ("persistent", "data", "uniform", or "gaussian")
     def sample_s_t_0():
         if init_type == 'persistent':
-            return sample_image_set(s_t_0, batch_size)
+            return sample_state_set(s_t_0, batch_size)
         elif init_type == 'data':
             return sample_q(batch_size), None
         elif init_type == 'uniform':
@@ -114,7 +114,7 @@ def sample_s_t(batch_size, L=config['num_mcmc_steps'], init_type=config['init_ty
         r_s_t += f_prime.view(f_prime.shape[0], -1).norm(dim=1).mean()
 
     if init_type == 'persistent' and update_s_t_0:
-        # update persistent image bank
+        # update persistent state bank
         s_t_0.data[s_t_0_inds] = x_s_t.detach().data.clone()
 
     return x_s_t.detach(), r_s_t.squeeze() / L
@@ -126,7 +126,7 @@ def sample_s_t(batch_size, L=config['num_mcmc_steps'], init_type=config['init_ty
 
 # containers for diagnostic records (see Section 3)
 d_s_t_record = t.zeros(config['num_train_iters']).to(device)  # energy difference between positive and negative samples
-r_s_t_record = t.zeros(config['num_train_iters']).to(device)  # average image gradient magnitude along Langevin path
+r_s_t_record = t.zeros(config['num_train_iters']).to(device)  # average state gradient magnitude along Langevin path
 
 print('Training has started.')
 for i in range(config['num_train_iters']):
