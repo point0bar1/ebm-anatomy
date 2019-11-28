@@ -70,7 +70,8 @@ print('Processing data...')
 q = ToyDataset(config['toy_type'], config['toy_groups'], config['toy_sd'],
                config['toy_radius'], config['viz_res'], config['kde_bw'])
 
-# initialize persistent images from noise (used when init_type='persistent' in sample_s_t)
+# initialize persistent images from noise 
+# s_t_0 is used when init_type == 'persistent' in sample_s_t()
 s_t_0 = 2 * t.rand([config['s_t_0_size'], 2, 1, 1]).to(device) - 1
 
 
@@ -86,9 +87,9 @@ def sample_image_set(image_set, batch_size=config['batch_size']):
 # sample positive images from dataset distribution q
 def sample_q(batch_size=config['batch_size']): return t.Tensor(q.sample_toy_data(batch_size)).to(device)
 
-# initialize and update images with langevin dynamics to obtain samples from short-run MCMC distribution s_t
+# initialize and update images with langevin dynamics to obtain samples from finite-step MCMC distribution s_t
 def sample_s_t(batch_size, L=config['num_mcmc_steps'], init_type=config['init_type'], update_s_t_0=True):
-    # get initial mcmc states for langevin updates (persistent, data, or noise)
+    # get initial mcmc states for langevin updates ("persistent", "data", "uniform", or "gaussian")
     def sample_s_t_0():
         if init_type == 'persistent':
             return sample_image_set(s_t_0, batch_size)
@@ -154,10 +155,13 @@ for i in range(config['num_train_iters']):
     # print and save learning info
     if (i + 1) == 1 or (i + 1) % config['log_info_freq'] == 0:
         print('{:>6d}   d_s_t={:>14.9f}   r_s_t={:>14.9f}'.format(i+1, d_s_t.detach().data, r_s_t))
+        # save network weights
         t.save(f.state_dict(), EXP_DIR + 'checkpoints/' + 'net_{:>06d}.pth'.format(i+1))
+        # plot diagnostics for energy difference d_s_t and gradient magnitude r_t
         if (i + 1) > 1:
             plot_diagnostics(i, d_s_t_record, r_s_t_record, EXP_DIR + 'plots/')
 
+    # visualize density and log-density for groundtruth, learned energy, and short-run distributions
     if (i + 1) % config['log_viz_freq'] == 0:
         print('{:>6}   Visualizing true density, learned density, and short-run KDE.'.format(i+1))
         x_kde = sample_s_t(batch_size=config['batch_size_kde'], update_s_t_0=False)[0]
