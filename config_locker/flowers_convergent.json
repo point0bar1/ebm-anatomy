@@ -14,7 +14,7 @@
   "net_type": "nonlocal",
   "_comment": "optimizer_type should use one of the following: sgd, adam",
   "optimizer_type": "sgd",
-  "lr_init": 5e-2,
+  "lr_init": 1e-1,
   "lr_min": 5e-4,
   "lr_decay": 0.99995,
   "_comment": "===== LANGEVIN PARAMETERS =====",
