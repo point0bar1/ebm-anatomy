@@ -140,9 +140,8 @@ class ToyDataset:
         else:
             self.means = None
 
-        # ground truth density and energy
+        # ground truth density
         if self.toy_type == 'gmm':
-            # save groundtruth landscape in self.config
             def true_density(x):
                 density = 0
                 for k in range(toy_groups):
@@ -150,7 +149,6 @@ class ToyDataset:
                                                             cov=(self.toy_sd**2)*np.eye(2))
                 return density
         elif self.toy_type == 'rings':
-            # save groundtruth landscape in self.config
             def true_density(x):
                 radius = np.sqrt((x[0] ** 2) + (x[1] ** 2))
                 density = 0
@@ -160,8 +158,6 @@ class ToyDataset:
                 return density
         else:
             raise RuntimeError('Invalid option for toy_type (use "gmm" or "rings")')
-
-        # ground truth density
         self.true_density = true_density
 
         # viz parameters
