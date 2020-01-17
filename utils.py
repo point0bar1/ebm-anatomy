@@ -145,12 +145,12 @@ class ToyDataset:
             def true_density(x):
                 density = 0
                 for k in range(toy_groups):
-                    density += self.weights[k]*self.mvn.pdf(np.array([x[0], x[1]]), mean=self.means[k].squeeze(),
+                    density += self.weights[k]*self.mvn.pdf(np.array([x[1], x[0]]), mean=self.means[k].squeeze(),
                                                             cov=(self.toy_sd**2)*np.eye(2))
                 return density
         elif self.toy_type == 'rings':
             def true_density(x):
-                radius = np.sqrt((x[0] ** 2) + (x[1] ** 2))
+                radius = np.sqrt((x[1] ** 2) + (x[0] ** 2))
                 density = 0
                 for k in range(toy_groups):
                     density += self.weights[k] * self.mvn.pdf(radius, mean=self.toy_radius * (k + 1),
