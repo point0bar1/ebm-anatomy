@@ -215,7 +215,7 @@ class ToyDataset:
                 z_learned_energy *= 2 / (epsilon ** 2)
 
             # transform learned energy into learned density
-            z_learned_density_unnormalized = np.exp(- z_learned_energy)
+            z_learned_density_unnormalized = np.exp(- (z_learned_energy - np.min(z_learned_energy)))
             bin_area = (self.xy_plot[1] - self.xy_plot[0]) ** 2
             z_learned_density = z_learned_density_unnormalized / (bin_area * np.sum(z_learned_density_unnormalized))
 
