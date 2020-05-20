@@ -1,0 +1,20 @@
+{
+  "_comment": "===== EXPERIMENT PARAMETERS =====",
+  "batch_size": 100,
+  "seed": 123,
+  "_comment": "===== IMAGE DATA PARAMETERS =====",
+  "im_sz": 32,
+  "im_ch": 3,
+  "_comment": "===== NETWORK =====",
+  "net_type": "vanilla",
+  "net_weight_path": "./trained_nets/flowers_nonconvergent_net.pth",
+  "train_epsilon": 1e-2,
+  "temp_factor": 1,
+  "_comment": "===== LANGEVIN PARAMETERS =====",
+  "mcmc_init": "uniform",
+  "epsilon": 1e-2,
+  "num_mcmc_steps": 150,
+  "use_mh_langevin": false,
+  "_comment": "===== LOGGING =====",
+  "log_freq": 50
+}
